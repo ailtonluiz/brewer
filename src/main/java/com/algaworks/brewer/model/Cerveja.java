@@ -30,29 +30,51 @@ public class Cerveja {
 	@NotBlank(message = "Nome é obrigatório")
 	private String nome;
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
-		return result;
+	@Size(min = 1, max = 50, message = "O tamanho da descrição deve estar entre 1 e 50")
+	private String descricao;
+
+	private BigDecimal valor;
+
+	@Column(name = "teor_alcoolico")
+	private BigDecimal teorAlcoolico;
+
+	private BigDecimal comissao;
+
+	@Column(name = "quantidade_estoque")
+	private Integer quantidadeEstoque;
+
+	@Enumerated(EnumType.STRING)
+	private Origem origem;
+
+	@Enumerated(EnumType.STRING)
+	private Sabor sabor;
+
+	@ManyToOne
+	@JoinColumn(name = "codigo_estilo")
+	private Estilo estilo;
+
+	public String getSku() {
+		return sku;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cerveja other = (Cerveja) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
-				return false;
-		} else if (!codigo.equals(other.codigo))
-			return false;
-		return true;
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public Long getCodigo() {
@@ -119,51 +141,29 @@ public class Cerveja {
 		this.estilo = estilo;
 	}
 
-	@Size(min = 1, max = 50, message = "O tamanho da descrição deve estar entre 1 e 50")
-	private String descricao;
-
-	private BigDecimal valor;
-
-	@Column(name = "teor_alcoolico")
-	private BigDecimal teorAlcoolico;
-
-	private BigDecimal comissao;
-
-	@Column(name = "quantidade_estoque")
-	private Integer quantidadeEstoque;
-
-	@Enumerated(EnumType.STRING)
-	private Origem origem;
-
-	@Enumerated(EnumType.STRING)
-	private Sabor sabor;
-
-	@ManyToOne
-	@JoinColumn(name = "codigo_estilo")
-	private Estilo estilo;
-
-	public String getSku() {
-		return sku;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		return result;
 	}
 
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cerveja other = (Cerveja) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		return true;
 	}
 
 }

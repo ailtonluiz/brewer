@@ -11,29 +11,26 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<!-- Codificação de caracteres -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<!-- Necessário arquivo web.xml? -->
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
-		<!-- Versão Java -->
 		<java.version>1.8</java.version>
+		<maven-compiler-pluging.version>3.2</maven-compiler-pluging.version>
+		<flyway-maven-plugin.version>4.0.2</flyway-maven-plugin.version>
+		<mysql-connector-java.version>5.1.39</mysql-connector-java.version>
 
-		<!-- Versão Maven -->
-		<maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
-
-		<!-- Versão Spring Framework -->
+		<!-- Spring MVC -->
 		<spring-framework.version>4.3.0.RELEASE</spring-framework.version>
 
-		<!-- Versão Servelt API -->
+		<!-- Servlet API -->
 		<servlet.version>3.1.0</servlet.version>
 
-		<!-- Versão Thymeleaf -->
+		<!-- Thymeleaf -->
 		<thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
 
-		<!-- Versão Bean Validator / Hibernate Validator 5.2.4.Final -->
+		<!-- Bean Validation / Hibernate Validator -->
 		<hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
 
 		<!-- Thymeleaf - Layout Dialect -->
@@ -46,23 +43,32 @@
 		<!-- JPA / Hibernate -->
 		<hibernate.version>5.1.0.Final</hibernate.version>
 
+		<!-- Spring Data JPA -->
+		<spring-data-jpa.version>1.10.2.RELEASE</spring-data-jpa.version>
 	</properties>
-	<!-- Maven -->
+
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
+				<version>${maven-compiler-pluging.version}</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-					<scope>compile</scope>
 				</configuration>
+			</plugin>
 
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>${flyway-maven-plugin.version}</version>
+				<configuration>
+					<driver>com.mysql.jdbc.Driver</driver>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	<!-- Spring Framework -->
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -83,8 +89,8 @@
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
-					<groupId>commos-logging</groupId>
-					<artifactId>commos-logging</artifactId>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -94,7 +100,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet.version}</version>
-			<scope>provied</scope>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Thymeleaf -->
@@ -105,11 +111,11 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Thymeleaf Spring -->
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
 			<artifactId>thymeleaf-spring4</artifactId>
 			<version>${thymeleaf.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Bean Validation / Hibernate Validator -->
@@ -148,7 +154,7 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${jcl-over-slf4j.version}</version>
 		</dependency>
-		
+
 		<!-- JPA / Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -165,7 +171,33 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- MySQL Driver -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector-java.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Spring Data JPA -->
+		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-jpa</artifactId>
+		    <version>${spring-data-jpa.version}</version>
+		</dependency>
+		
 
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 </project>
