@@ -8,21 +8,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.brewer.model.Estilo;
 import com.algaworks.brewer.repository.Estilos;
-import com.algaworks.brewer.service.exception.NomeEstiloJaCadastradroException;
+import com.algaworks.brewer.service.exception.NomeEstiloJaCadastradoException;
 
 @Service
 public class CadastroEstiloService {
 
 	@Autowired
 	private Estilos estilos;
-
+	
 	@Transactional
-	public void salvar(Estilo estilo) {
+	public Estilo salvar(Estilo estilo) {
 		Optional<Estilo> estiloOptional = estilos.findByNomeIgnoreCase(estilo.getNome());
 		if (estiloOptional.isPresent()) {
-			throw new NomeEstiloJaCadastradroException("Nome do estilo já cadastrado ");
+			throw new NomeEstiloJaCadastradoException("Nome do estilo já cadastrado");
 		}
-		estilos.save(estilo);
+		
+		return estilos.saveAndFlush(estilo);
 	}
-
+	
 }
