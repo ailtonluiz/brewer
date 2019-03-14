@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -53,7 +55,7 @@ public class Cerveja {
 	private BigDecimal teorAlcoolico;
 
 	@NotNull(message = "Informe a comissão")
-	@DecimalMax(value = "100.0", message = "A comissão dever ser igual ou menor que 100!")
+	@DecimalMax(value = "100.0", message = "A comissão dever ser igual ou menor que 100")
 	private BigDecimal comissao;
 
 	@NotNull(message = "Informe a quantidade estoque")
@@ -61,18 +63,24 @@ public class Cerveja {
 	@Column(name = "quantidade_estoque")
 	private Integer quantidadeEstoque;
 
-	@NotNull(message = "Por favor informe a origem!")
+	@NotNull(message = "Por favor informe a origem")
 	@Enumerated(EnumType.STRING)
 	private Origem origem;
 
-	@NotNull(message = "Por favor informe o sabor!")
+	@NotNull(message = "Por favor informe o sabor")
 	@Enumerated(EnumType.STRING)
 	private Sabor sabor;
 
-	@NotNull(message = "Por favor informe o sabor!")
+	@NotNull(message = "Por favor informe o estilo")
 	@ManyToOne
 	@JoinColumn(name = "codigo_estilo")
 	private Estilo estilo;
+	
+	@PrePersist
+	@PreUpdate
+	private void prePersistUpdate() {
+		sku = sku.toUpperCase();
+	}
 
 	public String getSku() {
 		return sku;
