@@ -39,7 +39,7 @@ public class Cerveja {
 	@NotBlank(message = "Nome é obrigatório")
 	@Size(min = 5, max = 80, message = "O tamanho do nome deve estar entre 5 e 80")
 	private String nome;
-	
+
 	@NotNull(message = "Informe uma descrição")
 	@Size(max = 150, message = "O tamanho da descrição deve estar entre 1 e 150")
 	private String descricao;
@@ -75,7 +75,12 @@ public class Cerveja {
 	@ManyToOne
 	@JoinColumn(name = "codigo_estilo")
 	private Estilo estilo;
-	
+
+	private String foto;
+
+	@Column(name = "content_type")
+	private String contentType;
+
 	@PrePersist
 	@PreUpdate
 	private void prePersistUpdate() {
@@ -168,6 +173,22 @@ public class Cerveja {
 
 	public void setEstilo(Estilo estilo) {
 		this.estilo = estilo;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 	@Override
