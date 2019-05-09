@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 
 @Embeddable
 public class Endereco implements Serializable {
@@ -19,6 +20,9 @@ public class Endereco implements Serializable {
 	private String complemento;
 	
 	private String cep;
+	
+	@Size(min = 5, max = 20, message = "O tamanho do nome deve estar entre 5 e 20")
+	private String bairro;
 	
 	@ManyToOne
 	@JoinColumn(name = "codigo_cidade")
@@ -74,5 +78,22 @@ public class Endereco implements Serializable {
 	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+	
+	public String getNomeCidadeSiglaEstado() {
+		if (this.cidade != null) {
+			return this.cidade.getNome() + " - " + this.cidade.getEstado().getSigla();
+		}
+		return null;
+	}
+	
+	
 
 }

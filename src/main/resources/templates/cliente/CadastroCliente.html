@@ -14,9 +14,19 @@
 
 	<div class="page-header">
 		<div class="container-fluid">
-			<h1>
-				Cadastro de cliente
-			</h1>
+			<div class="row">
+				<div class="col-sm-10">
+					<h1>Cadastro de cliente</h1>
+				</div>
+			
+				<div class="col-sm-2">
+					<div class="aw-page-header-controls">
+						<a class="btn  btn-default" th:href="@{/clientes}">
+							<i class="glyphicon  glyphicon-search"></i> <span class="hidden-xs  hidden-sm">Pesquisa</span>
+						</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -70,15 +80,21 @@
 					<input type="text" class="form-control" id="logradouro" th:field="*{endereco.logradouro}"/>
 				</div>
 				
-				<div class="form-group  col-sm-4">
+				<div class="form-group  col-sm-1">
 					<label for="numero">Número</label>
 					<input type="text" class="form-control" id="numero" th:field="*{endereco.numero}"/>
+				</div>
+				
+				<div class="form-group  col-sm-3">
+					<label for="complemento">Bairro</label>
+					<input type="text" class="form-control" id="bairro" th:field="*{endereco.bairro}"/>
 				</div>
 				
 				<div class="form-group  col-sm-4">
 					<label for="complemento">Complemento</label>
 					<input type="text" class="form-control" id="complemento" th:field="*{endereco.complemento}"/>
 				</div>
+				
 			</div>
 			
 			<div class="row">
