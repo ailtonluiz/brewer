@@ -1,2 +1,0 @@
-ALTER TABLE cliente
-ADD bairro VARCHAR(30);
