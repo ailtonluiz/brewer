@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org">
-	 
+	
 <body>
 <nav class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference" id="main-navbar" th:fragment="navbar">
 	<div class="container-fluid">
@@ -20,7 +20,7 @@
 
     <ul class="nav navbar-nav  navbar-right">
     	<li>
-        	<a href="#"><em class="fa  fa-sign-out"></em></a>
+        	<a th:href="@{/logout}"><em class="fa  fa-sign-out"></em></a>
       	</li> 
     </ul>
 
