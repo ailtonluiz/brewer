@@ -12,7 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 public class PageWrapper<T> {
 
-	public static final int MAX_PAG_ITEM = 10;
+	public static final int MAX_PAG_ITEM = 5;
 	private int currentNumber;
 	private List<PageItem> items;
 	private Page<T> page;
