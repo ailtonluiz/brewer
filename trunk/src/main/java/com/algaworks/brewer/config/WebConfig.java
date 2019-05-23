@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.number.NumberStyleFormatter;
@@ -40,7 +41,7 @@ import com.algaworks.brewer.controller.converter.CidadeConverter;
 import com.algaworks.brewer.controller.converter.EstadoConverter;
 import com.algaworks.brewer.controller.converter.EstiloConverter;
 import com.algaworks.brewer.controller.converter.GrupoConverter;
-import com.algaworks.brewer.session.TabelaItensVenda;
+import com.algaworks.brewer.session.TabelasItensSession;
 import com.algaworks.brewer.thymeleaf.BrewerDialect;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 import com.google.common.cache.CacheBuilder;
@@ -48,7 +49,7 @@ import com.google.common.cache.CacheBuilder;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
-@ComponentScan(basePackageClasses = { CervejasController.class, TabelaItensVenda.class })
+@ComponentScan(basePackageClasses = { CervejasController.class, TabelasItensSession.class })
 @EnableWebMvc
 @EnableSpringDataWebSupport
 @EnableCaching
@@ -74,7 +75,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		SpringTemplateEngine engine = new SpringTemplateEngine();
 		engine.setEnableSpringELCompiler(true);
 		engine.setTemplateResolver(templateResolver());
-		
+
 		engine.addDialect(new LayoutDialect());
 		engine.addDialect(new BrewerDialect());
 		engine.addDialect(new DataAttributeDialect());
@@ -88,14 +89,15 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		resolver.setPrefix("classpath:/templates/");
 		resolver.setSuffix(".html");
 		resolver.setTemplateMode(TemplateMode.HTML);
+		resolver.setCharacterEncoding("UTF-8");
 		return resolver;
 	}
-	
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
 	}
-	
+
 	@Bean
 	public FormattingConversionService mvcConversionService() {
 		DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService();
@@ -103,37 +105,37 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		conversionService.addConverter(new CidadeConverter());
 		conversionService.addConverter(new EstadoConverter());
 		conversionService.addConverter(new GrupoConverter());
-		
+
 		NumberStyleFormatter bigDecimalFormatter = new NumberStyleFormatter("#,##0.00");
 		conversionService.addFormatterForFieldType(BigDecimal.class, bigDecimalFormatter);
-		
+
 		NumberStyleFormatter integerFormatter = new NumberStyleFormatter("#,##0");
 		conversionService.addFormatterForFieldType(Integer.class, integerFormatter);
-		
+
 		// API de Datas do Java 8
 		DateTimeFormatterRegistrar dateTimeFormatter = new DateTimeFormatterRegistrar();
 		dateTimeFormatter.setDateFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		dateTimeFormatter.setTimeFormatter(DateTimeFormatter.ofPattern("HH:mm"));
 		dateTimeFormatter.registerFormatters(conversionService);
-		
+
 		return conversionService;
 	}
-	
+
 	@Bean
 	public LocaleResolver localeResolver() {
 		return new FixedLocaleResolver(new Locale("pt", "BR"));
 	}
-	
+
 	@Bean
 	public CacheManager cacheManager() {
-		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder()
-				.maximumSize(3)
-				.expireAfterAccess(20, TimeUnit.SECONDS);
-		
+		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(3).expireAfterAccess(20,
+				TimeUnit.SECONDS);
+
 		GuavaCacheManager cacheManager = new GuavaCacheManager();
 		cacheManager.setCacheBuilder(cacheBuilder);
 		return cacheManager;
 	}
-	
+
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource bundle = new ReloadableResourceBundleMessageSource();
@@ -141,5 +143,10 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		bundle.setDefaultEncoding("UTF-8"); // http://www.utf8-chartable.de/
 		return bundle;
 	}
-	
+
+	@Bean
+	public DomainClassConverter<FormattingConversionService> domainClassConverter() {
+		return new DomainClassConverter<FormattingConversionService>(mvcConversionService());
+	}
+
 }
