@@ -73,6 +73,25 @@ Brewer.MaskDate = (function() {
 	
 }());
 
+Brewer.MaskTime = (function() {
+	
+	function MaskTime() {
+		this.inputTime = $('.js-time');
+	}
+	
+	MaskTime.prototype.enable = function() {
+		this.inputTime.mask('00:00');
+		({
+			
+			 language: 'pt-BR',
+			
+		 });
+	}
+	
+	return MaskTime;
+	
+}());
+
 Brewer.Security = (function() {
 	
 	function Security() {
@@ -112,6 +131,9 @@ $(function() {
 	
 	var maskDate = new Brewer.MaskDate();
 	maskDate.enable();
+	
+	var maskTime = new Brewer.MaskTime();
+	maskTime.enable();
 	
 	var security = new Brewer.Security();
 	security.enable();
