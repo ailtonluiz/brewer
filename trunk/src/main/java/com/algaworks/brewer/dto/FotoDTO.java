@@ -1,21 +1,11 @@
-/**
- * 14 de mar de 2019
- * brewer
- * ailto
- */
 package com.algaworks.brewer.dto;
 
-/**
- * @author ailto
- *
- */
 public class FotoDTO {
 
 	private String nome;
 	private String contentType;
 
 	public FotoDTO(String nome, String contentType) {
-		super();
 		this.nome = nome;
 		this.contentType = contentType;
 	}
