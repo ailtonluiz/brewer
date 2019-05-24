@@ -18,6 +18,7 @@ public class VendaFilter {
 	private String nomeCliente;
 	private String cpfOuCnpjCliente;
 
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -81,5 +82,6 @@ public class VendaFilter {
 	public void setCpfOuCnpjCliente(String cpfOuCnpjCliente) {
 		this.cpfOuCnpjCliente = cpfOuCnpjCliente;
 	}
+
 
 }

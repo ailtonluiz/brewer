@@ -84,6 +84,7 @@ Brewer.MaskTime = (function() {
 		({
 			
 			 language: 'pt-BR',
+			 
 			
 		 });
 	}

@@ -33,18 +33,21 @@
 	<div class="container-fluid">
 		<form method="GET" th:object="${vendaFilter}" th:action="@{/vendas}">
 			<div class="row">
-				<div class="form-group  col-sm-6">
+				<div class="form-group  col-sm-4">
 					<label class="control-label" for="codigo">Código</label>
 					<input type="text" class="form-control" id="codigo" autofocus="autofocus" th:field="*{codigo}"/>
 				</div>
 				
-				<div class="form-group  col-sm-6">
+				<div class="form-group  col-sm-8">
 					<label for="status" class="control-label">Status</label>
 					<select id="status" class="form-control" th:field="*{status}">
 	                    <option value="">Todos os status</option>
 	                    <option th:each="status : ${todosStatus}" th:value="${status}" th:text="${status.descricao}"></option>
 	                </select>
 				</div>
+				
+				
+				
 			</div>
 			
 			<div class="row">
