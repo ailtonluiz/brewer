@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.controller.validator.VendaValidator;
+import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
@@ -53,6 +54,9 @@ public class VendasController {
 	
 	@Autowired
 	private Vendas vendas;
+	
+	@Autowired
+	private Mailer mailer;
 	
 	@InitBinder("venda")
 	public void inicializarValidador(WebDataBinder binder) {
@@ -85,7 +89,7 @@ public class VendasController {
 		venda.setUsuario(usuarioSistema.getUsuario());
 		
 		cadastroVendaService.salvar(venda);
-		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso");
+		attributes.addFlashAttribute("mensagem", "Pedido salvo com sucesso");
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
@@ -99,7 +103,7 @@ public class VendasController {
 		venda.setUsuario(usuarioSistema.getUsuario());
 		
 		cadastroVendaService.emitir(venda);
-		attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso");
+		attributes.addFlashAttribute("mensagem", "Pedido emitido com sucesso");
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 	
@@ -112,8 +116,10 @@ public class VendasController {
 		
 		venda.setUsuario(usuarioSistema.getUsuario());
 		
-		cadastroVendaService.salvar(venda);
-		attributes.addFlashAttribute("mensagem", "Venda salva e e-mail enviado");
+		venda = cadastroVendaService.salvar(venda);
+		mailer.enviar(venda);
+		
+		attributes.addFlashAttribute("mensagem", String.format("Pedido nº %d salvo com sucesso e e-mail enviado", venda.getCodigo()));
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 	
@@ -140,7 +146,7 @@ public class VendasController {
 	
 	@GetMapping
 	public ModelAndView pesquisar(VendaFilter vendaFilter,
-			@PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
+			@PageableDefault(size = 3) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("/venda/PesquisaVendas");
 		mv.addObject("todosStatus", StatusVenda.values());
 		mv.addObject("tiposPessoa", TipoPessoa.values());
