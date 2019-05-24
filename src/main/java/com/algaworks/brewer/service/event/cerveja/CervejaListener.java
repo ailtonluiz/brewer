@@ -1,8 +1,3 @@
-/**
- * 28 de abr de 2019
- * brewer
- * ailto
- */
 package com.algaworks.brewer.service.event.cerveja;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,21 +6,15 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.brewer.storage.FotoStorage;
 
-/**
- * @author ailto
- *
- */
-
 @Component
 public class CervejaListener {
 
 	@Autowired
 	private FotoStorage fotoStorage;
-
-	@EventListener(condition = "#evento.temFoto()")
+	
+	@EventListener(condition = "#evento.temFoto() and #evento.novaFoto")
 	public void cervejaSalva(CervejaSalvaEvent evento) {
-
 		fotoStorage.salvar(evento.getCerveja().getFoto());
 	}
-
+	
 }
