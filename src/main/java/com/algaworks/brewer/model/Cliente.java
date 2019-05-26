@@ -60,6 +60,8 @@ public class Cliente implements Serializable {
 	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
+	
+	private Boolean ativo = true;
 
 	@PrePersist
 	@PreUpdate
@@ -70,6 +72,10 @@ public class Cliente implements Serializable {
 	@PostLoad
 	private void postLoad() {
 		this.cpfOuCnpj = this.tipoPessoa.formatar(this.cpfOuCnpj);
+	}
+	
+	public boolean isNovo() {
+		return codigo == null;
 	}
 	
 	public Long getCodigo() {
@@ -128,6 +134,15 @@ public class Cliente implements Serializable {
 		this.endereco = endereco;
 	}
 	
+	
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
 	public String getCpfOuCnpjSemFormatacao() {
 		return TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}

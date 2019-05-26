@@ -14,20 +14,20 @@ public class Endereco implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String logradouro;
-	
+
 	private String numero;
-	
+
 	private String complemento;
-	
+
 	private String cep;
-	
+
 	@Size(min = 5, max = 20, message = "O tamanho do nome deve estar entre 5 e 20")
 	private String bairro;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_cidade")
 	private Cidade cidade;
-	
+
 	@Transient
 	private Estado estado;
 
@@ -72,7 +72,11 @@ public class Endereco implements Serializable {
 	}
 
 	public Estado getEstado() {
-		return estado;
+		if (this.cidade != null) {
+			return this.cidade.getEstado();
+		}
+
+		return null;
 	}
 
 	public void setEstado(Estado estado) {
@@ -86,14 +90,12 @@ public class Endereco implements Serializable {
 	public void setBairro(String bairro) {
 		this.bairro = bairro;
 	}
-	
+
 	public String getNomeCidadeSiglaEstado() {
 		if (this.cidade != null) {
 			return this.cidade.getNome() + " - " + this.cidade.getEstado().getSigla();
 		}
 		return null;
 	}
-	
-	
 
 }
