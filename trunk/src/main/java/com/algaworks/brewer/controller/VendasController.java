@@ -1,5 +1,6 @@
 package com.algaworks.brewer.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.controller.validator.VendaValidator;
+import com.algaworks.brewer.dto.VendaMes;
+import com.algaworks.brewer.dto.VendaOrigem;
 import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.ItemVenda;
@@ -68,7 +72,7 @@ public class VendasController {
 	@GetMapping("/nova")
 	public ModelAndView nova(Venda venda) {
 		ModelAndView mv = new ModelAndView("venda/CadastroVenda");
-		
+
 		setUuid(venda);
 
 		mv.addObject("itens", venda.getItens());
@@ -90,8 +94,7 @@ public class VendasController {
 		venda.setUsuario(usuarioSistema.getUsuario());
 
 		cadastroVendaService.salvar(venda);
-		attributes.addFlashAttribute("mensagem",
-				String.format("Pedido nº %d salvo com sucesso", venda.getCodigo()));
+		attributes.addFlashAttribute("mensagem", String.format("Pedido nº %d salvo com sucesso", venda.getCodigo()));
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
@@ -106,8 +109,7 @@ public class VendasController {
 		venda.setUsuario(usuarioSistema.getUsuario());
 
 		cadastroVendaService.emitir(venda);
-		attributes.addFlashAttribute("mensagem",
-				String.format("Pedido nº %d emitido com sucesso", venda.getCodigo()));
+		attributes.addFlashAttribute("mensagem", String.format("Pedido nº %d emitido com sucesso", venda.getCodigo()));
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
@@ -174,28 +176,36 @@ public class VendasController {
 		mv.addObject(venda);
 		return mv;
 	}
-	
+
 	@PostMapping(value = "/nova", params = "cancelar")
-	public ModelAndView cancelar(Venda venda, BindingResult result
-				, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+	public ModelAndView cancelar(Venda venda, BindingResult result, RedirectAttributes attributes,
+			@AuthenticationPrincipal UsuarioSistema usuarioSistema) {
 		try {
 			cadastroVendaService.cancelar(venda);
 		} catch (AccessDeniedException e) {
 			return new ModelAndView("/403");
 		}
-		
+
 		attributes.addFlashAttribute("mensagem",
 				String.format("Pedido nº %d cancelado com sucesso", venda.getCodigo()));
 		return new ModelAndView("redirect:/vendas/" + venda.getCodigo());
-}
-	
+	}
+
+	@GetMapping("/totalPorMes")
+	public @ResponseBody List<VendaMes> listarTotalVendaPorMes() {
+		return vendas.totalPorMes();
+	}
+
 	@PostMapping(value = "/nova", params = "cancelarOperacao")
 	public ModelAndView cancelarOperacao() {
-		
-		
+
 		return new ModelAndView("redirect:/vendas/nova");
 	}
-	
+
+	@GetMapping("/porOrigem")
+	public @ResponseBody List<VendaOrigem> vendasPorNacionalidade() {
+		return this.vendas.totalPorOrigem();
+	}
 
 	private ModelAndView mvTabelaItensVenda(String uuid) {
 		ModelAndView mv = new ModelAndView("venda/TabelaItensVenda");
@@ -210,11 +220,11 @@ public class VendasController {
 
 		vendaValidator.validate(venda, result);
 	}
-	
+
 	private void setUuid(Venda venda) {
 		if (StringUtils.isEmpty(venda.getUuid())) {
 			venda.setUuid(UUID.randomUUID().toString());
 		}
-}
+	}
 
 }
