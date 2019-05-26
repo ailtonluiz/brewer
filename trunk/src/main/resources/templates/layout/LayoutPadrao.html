@@ -13,8 +13,10 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/brewer.css}"/>
+
 	
 	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/vendors/bootstrap-datepicker.standalone.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/vendors/bootstrap-switch.min.css}"/>
 	
 	<link rel="shortcut icon" th:href="@{/images/favicon.png}"/>
 
@@ -55,6 +57,11 @@
 <script th:src="@{/javascripts/brewer.js}"></script>
 <script th:src="@{/javascripts/brewer.dialogo-excluir.js}"></script>
 
-<th:block layout:fragment="javascript-extra"></th:block>
+<th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/vendors/bootstrap-switch.min.js}"></script>
+	<script>
+		$('.js-status').bootstrapSwitch();
+	</script>
+</th:block>
 </body>
 </html>

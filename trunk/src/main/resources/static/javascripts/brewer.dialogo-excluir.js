@@ -22,7 +22,7 @@ Brewer.DialogoExcluir = (function() {
 		
 		swal({
 			title: 'Tem certeza?',
-			text: 'Excluir "' + objeto + '"? Está ação não pode ser desfeita.',
+			text: 'Excluir "' + objeto + '"? Está ação não poderá ser desfeita.',
 			showCancelButton: true,
 			confirmButtonColor: '#DD6B55',
 			confirmButtonText: 'Sim, excluir!',

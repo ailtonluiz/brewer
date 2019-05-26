@@ -28,9 +28,11 @@ Brewer.BotaoSubmit = (function() {
 	
 }());
 
+
 $(function() {
 	
 	var botaoSubmit = new Brewer.BotaoSubmit();
 	botaoSubmit.iniciar();
+	
 	
 });
