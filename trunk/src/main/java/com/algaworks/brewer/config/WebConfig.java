@@ -61,6 +61,7 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 @EnableAsync
 public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
+	
 	private ApplicationContext applicationContext;
 
 	@Override
@@ -78,8 +79,8 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		resolver.setJdbcDataSource(datasource);
 		resolver.setOrder(0);
 		return resolver;
-}
-	
+	}
+
 	@Bean
 	public ViewResolver viewResolver() {
 		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
