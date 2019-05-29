@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Vendas;
+import com.algaworks.brewer.service.event.venda.CancelaVendaEvent;
 import com.algaworks.brewer.service.event.venda.VendaEvent;
 
 @Service
@@ -49,16 +50,17 @@ public class CadastroVendaService {
 		publisher.publishEvent(new VendaEvent(venda));
 	}
 	
+	
+	
 
 	@PreAuthorize("#venda.usuario == principal.usuario or hasRole('CANCELAR_VENDA')")
 	@Transactional
 	public void cancelar(Venda venda) {
 		Venda vendaExistente = vendas.findOne(venda.getCodigo());
-
+		
 		vendaExistente.setStatus(StatusVenda.CANCELADA);
 		vendas.save(vendaExistente);
-		
-		publisher.publishEvent(new VendaEvent(venda));
+		publisher.publishEvent(new CancelaVendaEvent(vendaExistente));
 	}
 
 }
