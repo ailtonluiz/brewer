@@ -23,4 +23,13 @@ public class VendaListener {
 		}
 	}
 	
+	@EventListener
+	public void vendaCancelada(CancelaVendaEvent cancelaVendaEvent) {
+		for (ItemVenda item : cancelaVendaEvent.getVenda().getItens()) {
+			Cerveja cerveja = cervejas.findOne(item.getCerveja().getCodigo());
+			cerveja.setQuantidadeEstoque(cerveja.getQuantidadeEstoque() + item.getQuantidade());
+			cervejas.save(cerveja);
+		}
+	}
+	
 }
