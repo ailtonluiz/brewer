@@ -49,15 +49,12 @@ public class CadastroVendaService {
 
 		publisher.publishEvent(new VendaEvent(venda));
 	}
-	
-	
-	
 
 	@PreAuthorize("#venda.usuario == principal.usuario or hasRole('CANCELAR_VENDA')")
 	@Transactional
 	public void cancelar(Venda venda) {
 		Venda vendaExistente = vendas.findOne(venda.getCodigo());
-		
+
 		vendaExistente.setStatus(StatusVenda.CANCELADA);
 		vendas.save(vendaExistente);
 		publisher.publishEvent(new CancelaVendaEvent(vendaExistente));
