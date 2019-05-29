@@ -19,10 +19,10 @@ public class CadastroVendaService {
 
 	@Autowired
 	private Vendas vendas;
-	
+
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	@Transactional
 	public Venda salvar(Venda venda) {
 		if (venda.isNova()) {
@@ -30,14 +30,14 @@ public class CadastroVendaService {
 		} else {
 			Venda vendaExistente = vendas.findOne(venda.getCodigo());
 			venda.setDataCriacao(vendaExistente.getDataCriacao());
-			
+
 		}
-		
+
 		if (venda.getDataEntrega() != null) {
-			venda.setDataHoraEntrega(LocalDateTime.of(venda.getDataEntrega()
-					, venda.getHorarioEntrega() != null ? venda.getHorarioEntrega() : LocalTime.NOON));
+			venda.setDataHoraEntrega(LocalDateTime.of(venda.getDataEntrega(),
+					venda.getHorarioEntrega() != null ? venda.getHorarioEntrega() : LocalTime.NOON));
 		}
-		
+
 		return vendas.saveAndFlush(venda);
 	}
 
@@ -45,17 +45,20 @@ public class CadastroVendaService {
 	public void emitir(Venda venda) {
 		venda.setStatus(StatusVenda.EMITIDA);
 		salvar(venda);
-		
+
 		publisher.publishEvent(new VendaEvent(venda));
-}
+	}
+	
 
 	@PreAuthorize("#venda.usuario == principal.usuario or hasRole('CANCELAR_VENDA')")
 	@Transactional
 	public void cancelar(Venda venda) {
 		Venda vendaExistente = vendas.findOne(venda.getCodigo());
-		
+
 		vendaExistente.setStatus(StatusVenda.CANCELADA);
 		vendas.save(vendaExistente);
+		
+		publisher.publishEvent(new VendaEvent(venda));
 	}
 
 }
