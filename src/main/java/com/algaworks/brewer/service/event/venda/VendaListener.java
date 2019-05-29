@@ -13,7 +13,7 @@ public class VendaListener {
 
 	@Autowired
 	private Cervejas cervejas;
-	
+
 	@EventListener
 	public void vendaEmitida(VendaEvent vendaEvent) {
 		for (ItemVenda item : vendaEvent.getVenda().getItens()) {
@@ -22,7 +22,7 @@ public class VendaListener {
 			cervejas.save(cerveja);
 		}
 	}
-	
+
 	@EventListener
 	public void vendaCancelada(CancelaVendaEvent cancelaVendaEvent) {
 		for (ItemVenda item : cancelaVendaEvent.getVenda().getItens()) {
@@ -31,5 +31,5 @@ public class VendaListener {
 			cervejas.save(cerveja);
 		}
 	}
-	
+
 }

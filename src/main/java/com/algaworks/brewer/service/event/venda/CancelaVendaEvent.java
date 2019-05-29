@@ -14,4 +14,10 @@ public class CancelaVendaEvent {
 		return venda;
 	}
 
+	public void setVenda(Venda venda) {
+		this.venda = venda;
+	}
+	
+	
+
 }
