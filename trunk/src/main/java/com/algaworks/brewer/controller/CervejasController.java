@@ -65,7 +65,10 @@ public class CervejasController {
 		attributes.addFlashAttribute("mensagem", "Cerveja salva com sucesso!");
 		return new ModelAndView("redirect:/cervejas/nova");
 	}
-	
+	@RequestMapping("/entrada")
+	public String entrada() {
+		return "/construcao";
+	}
 	@GetMapping
 	public ModelAndView pesquisar(CervejaFilter cervejaFilter, BindingResult result
 			, @PageableDefault(size = 7) Pageable pageable, HttpServletRequest httpServletRequest) {
